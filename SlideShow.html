@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="./SlideShow.css">
+    <title>Test CSS</title>
+</head>
+<body>
+   <div class="contain">  
+        <div class="slidershow">
+            <div class="slides">
+            </div>
+            <div class="dots">
+            </div>
+        </div>
+        <div class="btn_prev">
+            <i class="fa-solid fa-angle-left"></i>
+       </div>
+        <div class="btn_next">
+            <i class="fa-solid fa-angle-right"></i>
+        </div>
+   </div>
+<script>
+    const $=document.querySelector.bind(document)
+    const slides = $('.slides')
+    const dots=$('.dots')
+    const nextBtn=$('.btn_next')
+    const prevBtn=$('.btn_prev')
+    const app={
+        currentIndex: 0,
+        SliderData: [
+            {
+                img:'https://thumbs.dreamstime.com/z/ban-gioc-waterfall-vietnam-8516319.jpg'
+            },
+            {
+                img:'https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-james-wheeler-417074.jpg&fm=jpg'
+            },
+            {
+                img:'https://images.pexels.com/photos/709552/pexels-photo-709552.jpeg?cs=srgb&dl=pexels-ian-turnell-709552.jpg&fm=jpg'
+            },
+            {
+                img:'https://images.pexels.com/photos/1237119/pexels-photo-1237119.jpeg?cs=srgb&dl=pexels-jonathan-petersson-1237119.jpg&fm=jpg'
+            },
+            {
+                img:'https://images.pexels.com/photos/268533/pexels-photo-268533.jpeg?cs=srgb&dl=pexels-pixabay-268533.jpg&fm=jpg'
+            },
+            {
+                img:'https://images.pexels.com/photos/206359/pexels-photo-206359.jpeg?cs=srgb&dl=pexels-pixabay-206359.jpg&fm=jpg'
+            },
+                
+        ],
+        render1: function() {
+            const htmls = this.SliderData.map((slide,index1) => {
+                if(index1===this.currentIndex){
+                    return `
+                    <div class="slide" id="slide" key=${index1}>
+                        <img src=${slide.img} class="img"></img>
+                    </div>
+                 `
+                }  
+            })
+            slides.innerHTML = htmls.join('');
+        },
+        render2: function(){
+            const points = this.SliderData.map((item,index2)=>{
+                  return `
+                    <button class="dot" onclick="app.clickdot(${index2})" id=${index2}></button>
+                  `
+            })
+            dots.innerHTML = points.join('');
+        },
+        makeslide: function(){
+            nextBtn.onclick = function(){
+                app.nextslide();
+                
+            };
+            prevBtn.onclick = function(){
+                app.prevslide();
+                
+            };
+        },
+        autoChange: function(){
+            setInterval(function(){
+                app.nextslide()
+            },5000)
+        },
+        clickdot: function(i){
+            document.getElementById(this.currentIndex).style.backgroundColor="gray"
+            this.currentIndex=i;
+            document.getElementById(this.currentIndex).style.backgroundColor="red"
+            this.render1();
+        },
+        nextslide: function(){
+            document.getElementById(this.currentIndex).style.backgroundColor="gray"
+            this.currentIndex++;
+            if(this.currentIndex===this.SliderData.length){
+                this.currentIndex=0
+            }
+            document.getElementById(this.currentIndex).style.backgroundColor="red"
+            this.render1()
+        },
+        prevslide: function(){
+            document.getElementById(this.currentIndex).style.backgroundColor="gray"
+            if(this.currentIndex>0){
+                this.currentIndex--;
+            }else{
+                this.currentIndex=this.SliderData.length-1;
+            }
+            document.getElementById(this.currentIndex).style.backgroundColor="red"
+            this.render1();
+        },
+        
+        start: function(){
+            this.render1();
+            this.render2();
+            document.getElementById('0').style.backgroundColor="red"
+            this.autoChange();
+            this.makeslide();    
+        },
+    }
+    app.start()
+
+</script>
+</body>
+</html>
